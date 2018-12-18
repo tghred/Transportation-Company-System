@@ -1,0 +1,1344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Transportation company" id="Project_1a41649" template="Default" database="SqlServer" >
+	<schema name="Transportation company" schemaname="Transportation company" >
+		<table name="Actual_Special_Trip" >
+			<column name="Actual_Special_Trip_ID" type="int" jt="4" mandatory="y" />
+			<column name="Special_Order_ID" type="int" jt="4" mandatory="y" />
+			<column name="Actual_Start_Time" type="datetime" jt="93" />
+			<column name="Actual_Ending_Time" type="datetime" jt="93" />
+			<index name="Pk_Actual_Special_Trip_Actual_Special_Trip_ID" unique="PRIMARY_KEY" >
+				<column name="Actual_Special_Trip_ID" />
+			</index>
+			<index name="Idx_Actual_Special_Trip_Special_Order_ID" unique="NORMAL" >
+				<column name="Special_Order_ID" />
+			</index>
+			<fk name="fk_actual_special_trip" to_schema="Transportation company" to_table="Special_order" >
+				<fk_column name="Special_Order_ID" pk="sp_order_id" />
+			</fk>
+		</table>
+		<table name="Actual_Trip" >
+			<column name="Actual_Trip_ID" type="int" jt="4" mandatory="y" />
+			<column name="Reservation_ID" type="int" jt="4" mandatory="y" />
+			<column name="Actual_End_Time" type="datetime" jt="93" mandatory="y" />
+			<index name="Pk_Actual_Trip_Actual_Trip_ID" unique="PRIMARY_KEY" >
+				<column name="Actual_Trip_ID" />
+			</index>
+			<index name="Idx_Actual_Trip_Reservation_ID" unique="NORMAL" >
+				<column name="Reservation_ID" />
+			</index>
+			<fk name="fk_actual_trip_reservation" to_schema="Transportation company" to_table="Reservation" >
+				<fk_column name="Reservation_ID" pk="Reservation_id" />
+			</fk>
+		</table>
+		<table name="Bonuses" >
+			<column name="bonus_id" type="int" jt="4" mandatory="y" />
+			<column name="bonus_amount" type="float" jt="8" />
+			<column name="pay_id" type="int" jt="4" />
+			<column name="bouns_description" type="varchar(max)" length="1000" jt="12" />
+			<index name="Pk_Bounnses_bouns_id" unique="PRIMARY_KEY" >
+				<column name="bonus_id" />
+			</index>
+			<index name="Idx_Bounnses_pay_id" unique="NORMAL" >
+				<column name="pay_id" />
+			</index>
+			<fk name="fk_bounnses_payroll" to_schema="Transportation company" to_table="payRoll" >
+				<fk_column name="pay_id" pk="pay_id" />
+			</fk>
+			<fk name="fk_bounnses_drivers" to_schema="Transportation company" to_table="Drivers" />
+		</table>
+		<table name="Branches" >
+			<column name="Branch_ID" type="int" jt="4" mandatory="y" />
+			<column name="Latitude" type="int" length="100" jt="4" mandatory="y" />
+			<column name="Longitude" type="int" jt="4" mandatory="y" />
+			<index name="Pk_Branches_Branch_ID" unique="PRIMARY_KEY" >
+				<column name="Branch_ID" />
+			</index>
+		</table>
+		<table name="Buses" >
+			<column name="Bus_id" type="int" jt="4" mandatory="y" />
+			<column name="Bus_brand" type="varchar" length="50" jt="12" />
+			<column name="Bus_Model" type="varchar" length="15" jt="12" mandatory="y" />
+			<column name="Bus_capacity" type="int" length="20" jt="4" />
+			<column name="Bus_license" type="int" jt="4" />
+			<column name="license_exp_date" type="date" jt="91" />
+			<index name="Pk_Buses_Bus_id" unique="PRIMARY_KEY" >
+				<column name="Bus_id" />
+			</index>
+		</table>
+		<table name="Buses_gas_money" >
+			<column name="Bus_id" type="int" jt="4" mandatory="y" />
+			<column name="Transaction_ID" type="int" jt="4" mandatory="y" />
+			<index name="Pk_Buses_Bus_id_0" unique="PRIMARY_KEY" >
+				<column name="Bus_id" />
+			</index>
+			<index name="Idx_Buses_gas_money_Transaction_ID" unique="NORMAL" >
+				<column name="Transaction_ID" />
+			</index>
+			<fk name="fk_buses_gas_money" to_schema="Transportation company" to_table="Transactions" >
+				<fk_column name="Transaction_ID" pk="Transaction_id" />
+			</fk>
+			<fk name="fk_buses_gas_money_buses" to_schema="Transportation company" to_table="Buses" >
+				<fk_column name="Bus_id" pk="Bus_id" />
+			</fk>
+		</table>
+		<table name="Discount" >
+			<column name="Discount_id" type="int" jt="4" mandatory="y" />
+			<column name="Discount_value" type="varchar" length="20" jt="12" />
+			<column name="Expire_date" type="date" jt="91" />
+			<index name="Pk_Discount_Discount_id" unique="PRIMARY_KEY" >
+				<column name="Discount_id" />
+			</index>
+		</table>
+		<table name="Discount_ranks" >
+			<column name="Rank_id" type="int" jt="4" mandatory="y" />
+			<column name="Discount_id" type="int" jt="4" mandatory="y" />
+			<index name="_2" unique="PRIMARY_KEY" >
+				<column name="Rank_id" />
+				<column name="Discount_id" />
+			</index>
+			<index name="Idx_Discount_ranks_Discount_id" unique="NORMAL" >
+				<column name="Discount_id" />
+			</index>
+			<index name="Idx_Discount_ranks_Rank_id" unique="NORMAL" >
+				<column name="Rank_id" />
+			</index>
+			<fk name="fk_discount_ranks_discount" to_schema="Transportation company" to_table="Discount" >
+				<fk_column name="Discount_id" pk="Discount_id" />
+			</fk>
+			<fk name="fk_discount_ranks_ranks" to_schema="Transportation company" to_table="Ranks" >
+				<fk_column name="Rank_id" pk="Rank_id" />
+			</fk>
+		</table>
+		<table name="Driver_Bonus_JN" >
+			<column name="Driver_ID" type="int" jt="4" mandatory="y" />
+			<column name="Bonus_ID" type="int" jt="4" mandatory="y" />
+			<column name="bonus_date" type="date" jt="91" mandatory="y" />
+			<index name="Pk_Buses_Bus_id_1" unique="PRIMARY_KEY" >
+				<column name="Driver_ID" />
+			</index>
+			<index name="Idx_Buses_gas_money_Transaction_ID_0" unique="NORMAL" >
+				<column name="Bonus_ID" />
+			</index>
+			<fk name="fk_driver_penalty_jn_bonuses" to_schema="Transportation company" to_table="Bonuses" >
+				<fk_column name="Bonus_ID" pk="bonus_id" />
+			</fk>
+			<fk name="fk_driver_penalty_jn_drivers" to_schema="Transportation company" to_table="Drivers" >
+				<fk_column name="Driver_ID" pk="Driver_id" />
+			</fk>
+		</table>
+		<table name="Driver_Penalty_JN" >
+			<column name="Driver_ID" type="int" jt="4" mandatory="y" />
+			<column name="Penalty_ID" type="int" jt="4" mandatory="y" />
+			<column name="penalety_date" type="date" jt="91" mandatory="y" />
+			<index name="Pk_Buses_Bus_id_2" unique="PRIMARY_KEY" >
+				<column name="Driver_ID" />
+			</index>
+			<index name="Idx_Buses_gas_money_Transaction_ID_1" unique="NORMAL" >
+				<column name="Penalty_ID" />
+			</index>
+			<fk name="fk_driver_penalty_jn_0_drivers" to_schema="Transportation company" to_table="Drivers" >
+				<fk_column name="Driver_ID" pk="Driver_id" />
+			</fk>
+			<fk name="fk_driver_penalty_jn_penalties" to_schema="Transportation company" to_table="penalties" >
+				<fk_column name="Penalty_ID" pk="penalty_id" />
+			</fk>
+		</table>
+		<table name="Drivers" >
+			<column name="Driver_id" type="int" jt="4" mandatory="y" />
+			<column name="First_name" type="varchar" length="50" jt="12" />
+			<column name="last_name" type="varchar" length="50" jt="12" />
+			<column name="phone_number" type="varchar" length="100" jt="12" />
+			<column name="year_of_experince" type="int" jt="4" />
+			<column name="Birthday" type="date" jt="91" />
+			<column name="social_state" type="varchar" length="30" jt="12" />
+			<column name="Ssn" type="int" jt="4" />
+			<column name="license_number" type="int" jt="4" />
+			<column name="pay_id" type="int" jt="4" />
+			<column name="Medical_id" type="int" jt="4" />
+			<index name="Pk_Drivers_Driver_id" unique="PRIMARY_KEY" >
+				<column name="Driver_id" />
+			</index>
+			<index name="Idx_Drivers_pay_id" unique="NORMAL" >
+				<column name="pay_id" />
+			</index>
+			<index name="Idx_Drivers_Medical_id" unique="NORMAL" >
+				<column name="Medical_id" />
+			</index>
+			<fk name="fk_drivers_payroll" to_schema="Transportation company" to_table="payRoll" >
+				<fk_column name="pay_id" pk="pay_id" />
+			</fk>
+			<fk name="fk_drivers_medical_care" to_schema="Transportation company" to_table="Medical_care" >
+				<fk_column name="Medical_id" pk="Medical_id" />
+			</fk>
+			<fk name="fk_drivers_bonuses" to_schema="Transportation company" to_table="Bonuses" />
+			<fk name="fk_drivers_penalties" to_schema="Transportation company" to_table="penalties" />
+		</table>
+		<table name="Drivers_Rating" >
+			<column name="Rating_ID" type="int" jt="4" mandatory="y" />
+			<column name="Customer_ID" type="int" jt="4" mandatory="y" />
+			<column name="Driver_ID" type="int" jt="4" mandatory="y" />
+			<column name="rate" type="int" jt="4" mandatory="y" />
+			<index name="Pk_Drivers_Rating_Rating_ID" unique="PRIMARY_KEY" >
+				<column name="Rating_ID" />
+			</index>
+			<index name="Idx_Drivers_Rating_Customer_ID" unique="NORMAL" >
+				<column name="Customer_ID" />
+			</index>
+			<index name="Idx_Drivers_Rating_Driver_ID" unique="NORMAL" >
+				<column name="Driver_ID" />
+			</index>
+			<fk name="fk_drivers_rating_customer" to_schema="Transportation company" to_table="customer" >
+				<fk_column name="Customer_ID" pk="customer_id" />
+			</fk>
+			<fk name="fk_drivers_rating_drivers" to_schema="Transportation company" to_table="Drivers" >
+				<fk_column name="Driver_ID" pk="Driver_id" />
+			</fk>
+		</table>
+		<table name="Employee_Bonus_JN" >
+			<column name="Employee_ID" type="int" jt="4" mandatory="y" />
+			<column name="Bonus_ID" type="int" jt="4" mandatory="y" />
+			<index name="Pk_Buses_Bus_id_3" unique="PRIMARY_KEY" >
+				<column name="Employee_ID" />
+			</index>
+			<index name="Idx_Buses_gas_money_Transaction_ID_2" unique="NORMAL" >
+				<column name="Bonus_ID" />
+			</index>
+			<fk name="fk_employee_bonus_jn_employees" to_schema="Transportation company" to_table="employees" >
+				<fk_column name="Employee_ID" pk="Emp_id" />
+			</fk>
+			<fk name="fk_employee_bonus_jn_bonuses" to_schema="Transportation company" to_table="Bonuses" >
+				<fk_column name="Bonus_ID" pk="bonus_id" />
+			</fk>
+		</table>
+		<table name="Employee_Penalty_JN" >
+			<column name="Employee_ID" type="int" jt="4" mandatory="y" />
+			<column name="Penalty_ID" type="int" jt="4" mandatory="y" />
+			<index name="Pk_Buses_Bus_id_4" unique="PRIMARY_KEY" >
+				<column name="Employee_ID" />
+			</index>
+			<index name="Idx_Buses_gas_money_Transaction_ID_3" unique="NORMAL" >
+				<column name="Penalty_ID" />
+			</index>
+			<fk name="fk_employee_penalty_jn" to_schema="Transportation company" to_table="employees" >
+				<fk_column name="Employee_ID" pk="Emp_id" />
+			</fk>
+			<fk name="Penalty_ID" to_schema="Transportation company" to_table="penalties" >
+				<fk_column name="Penalty_ID" pk="penalty_id" />
+			</fk>
+		</table>
+		<table name="Insurance_standard" >
+			<column name="Insurance_standard_id" type="int" jt="4" mandatory="y" />
+			<column name="Position" type="varchar" length="50" jt="12" />
+			<column name="Insurance_amount" type="float" jt="8" />
+			<index name="Pk_Inturance_standard_Insurance_standard_id" unique="PRIMARY_KEY" >
+				<column name="Insurance_standard_id" />
+			</index>
+		</table>
+		<table name="Medical_care" >
+			<column name="Medical_id" type="int" jt="4" mandatory="y" />
+			<column name="balance" type="float" jt="8" />
+			<column name="Transaction_id" type="int" jt="4" />
+			<column name="Insurance_standard_id" type="int" jt="4" />
+			<index name="Pk_Medical_care_Medical_id" unique="PRIMARY_KEY" >
+				<column name="Medical_id" />
+			</index>
+			<index name="Idx_Medical_care_Transaction_id" unique="NORMAL" >
+				<column name="Transaction_id" />
+			</index>
+			<index name="Idx_Medical_care_Insurance_standard_id" unique="NORMAL" >
+				<column name="Insurance_standard_id" />
+			</index>
+			<fk name="fk_medical_care_transactions" to_schema="Transportation company" to_table="Transactions" >
+				<fk_column name="Transaction_id" pk="Transaction_id" />
+			</fk>
+			<fk name="fk_medical_care" to_schema="Transportation company" to_table="Insurance_standard" >
+				<fk_column name="Insurance_standard_id" pk="Insurance_standard_id" />
+			</fk>
+			<fk name="fk_medical_care_drivers" to_schema="Transportation company" to_table="Drivers" />
+		</table>
+		<table name="Payment_Method" >
+			<column name="pay_method_id" type="int" jt="4" mandatory="y" />
+			<column name="method_name" type="varchar" length="20" jt="12" />
+			<column name="payment_info" type="varchar" length="1000" jt="12" />
+			<index name="Pk_Payment_Method_pay_method_id" unique="PRIMARY_KEY" >
+				<column name="pay_method_id" />
+			</index>
+		</table>
+		<table name="Price_plane" >
+			<column name="Price_id" type="int" jt="4" mandatory="y" />
+			<column name="price" type="float" jt="8" />
+			<column name="class" type="varchar" length="50" jt="12" />
+			<column name="bus_ID" type="int" length="50" jt="4" mandatory="y" />
+			<index name="Pk_Price_plane_Price_id" unique="PRIMARY_KEY" >
+				<column name="Price_id" />
+			</index>
+			<index name="Idx_Price_plane_bus_model" unique="NORMAL" >
+				<column name="bus_ID" />
+			</index>
+			<fk name="fk_price_plane_buses" to_schema="Transportation company" to_table="Buses" >
+				<fk_column name="bus_ID" pk="Bus_id" />
+			</fk>
+		</table>
+		<table name="Ranks" >
+			<column name="Rank_id" type="int" jt="4" mandatory="y" />
+			<column name="rank_name" type="varchar" length="50" jt="12" />
+			<column name="level_limit" type="int" jt="4" />
+			<column name="customer_id" type="int" jt="4" />
+			<index name="Pk_Ranks_Rank_id" unique="PRIMARY_KEY" >
+				<column name="Rank_id" />
+			</index>
+			<index name="Idx_Ranks_customer_id" unique="NORMAL" >
+				<column name="customer_id" />
+			</index>
+			<fk name="fk_ranks_customer" to_schema="Transportation company" to_table="customer" >
+				<fk_column name="customer_id" pk="customer_id" />
+			</fk>
+		</table>
+		<table name="Reservation" >
+			<column name="Reservation_id" type="int" jt="4" mandatory="y" />
+			<column name="seat_no_booked" type="int" jt="4" />
+			<column name="Driver_id" type="int" jt="4" />
+			<column name="schedule_id" type="int" jt="4" />
+			<column name="payment_method_id" type="int" jt="4" />
+			<column name="feedback_id" type="int" jt="4" />
+			<column name="customer_id" type="int" jt="4" />
+			<column name="Transaction_id" type="int" jt="4" />
+			<index name="Pk_Reservation_Reservation_id" unique="PRIMARY_KEY" >
+				<column name="Reservation_id" />
+			</index>
+			<index name="Idx_Reservation_Driver_id" unique="NORMAL" >
+				<column name="Driver_id" />
+			</index>
+			<index name="Idx_Reservation_schedule_id" unique="NORMAL" >
+				<column name="schedule_id" />
+			</index>
+			<index name="Idx_Reservation_payment_method_id" unique="NORMAL" >
+				<column name="payment_method_id" />
+			</index>
+			<index name="Idx_Reservation_feedback_id" unique="NORMAL" >
+				<column name="feedback_id" />
+			</index>
+			<index name="Idx_Reservation_Transaction_id" unique="NORMAL" >
+				<column name="Transaction_id" />
+			</index>
+			<index name="Idx_Reservation_customer_id" unique="NORMAL" >
+				<column name="customer_id" />
+			</index>
+			<fk name="fk_reservation_drivers" to_schema="Transportation company" to_table="Drivers" >
+				<fk_column name="Driver_id" pk="Driver_id" />
+			</fk>
+			<fk name="fk_reservation_schedule" to_schema="Transportation company" to_table="schedule" >
+				<fk_column name="schedule_id" pk="schedule_id" />
+			</fk>
+			<fk name="fk_reservation_payment_method" to_schema="Transportation company" to_table="Payment_Method" >
+				<fk_column name="payment_method_id" pk="pay_method_id" />
+			</fk>
+			<fk name="fk_reservation_feedback" to_schema="Transportation company" to_table="feedback" >
+				<fk_column name="feedback_id" pk="feedback_id" />
+			</fk>
+			<fk name="fk_reservation_transactions" to_schema="Transportation company" to_table="Transactions" >
+				<fk_column name="Transaction_id" pk="Transaction_id" />
+			</fk>
+			<fk name="fk_reservation_customer" to_schema="Transportation company" to_table="customer" >
+				<fk_column name="customer_id" pk="customer_id" />
+			</fk>
+		</table>
+		<table name="Special_order" >
+			<column name="sp_order_id" type="int" jt="4" mandatory="y" />
+			<column name="starting_point_Longitude" type="int" length="50" jt="4" mandatory="y" />
+			<column name="Starting_Point_Latitude" type="int" jt="4" mandatory="y" />
+			<column name="Ending_point_Longitude" type="int" length="50" jt="4" mandatory="y" />
+			<column name="Ending_Point_Latitude" type="int" jt="4" mandatory="y" />
+			<column name="Estimated_time" type="time" jt="92" />
+			<column name="price" type="float" jt="8" />
+			<column name="customer_id" type="int" jt="4" />
+			<column name="Bus_id" type="int" jt="4" />
+			<column name="Driver_id" type="int" jt="4" />
+			<column name="transaction_id" type="int" jt="4" mandatory="y" />
+			<column name="Payment_Method_ID" type="int" jt="4" mandatory="y" />
+			<index name="Pk_Special_order_sp_order_id" unique="PRIMARY_KEY" >
+				<column name="sp_order_id" />
+			</index>
+			<index name="Idx_Special_order_Bus_id" unique="NORMAL" >
+				<column name="Bus_id" />
+			</index>
+			<index name="Idx_Special_order_customer_id" unique="NORMAL" >
+				<column name="customer_id" />
+			</index>
+			<index name="Idx_Special_order_Driver_id" unique="NORMAL" >
+				<column name="Driver_id" />
+			</index>
+			<index name="Idx_Special_order_transaction_id" unique="NORMAL" >
+				<column name="transaction_id" />
+			</index>
+			<index name="Idx_Special_order_Payment_Method_ID" unique="NORMAL" >
+				<column name="Payment_Method_ID" />
+			</index>
+			<fk name="fk_special_order_buses" to_schema="Transportation company" to_table="Buses" >
+				<fk_column name="Bus_id" pk="Bus_id" />
+			</fk>
+			<fk name="fk_special_order_customer" to_schema="Transportation company" to_table="customer" >
+				<fk_column name="customer_id" pk="customer_id" />
+			</fk>
+			<fk name="fk_special_order_drivers" to_schema="Transportation company" to_table="Drivers" >
+				<fk_column name="Driver_id" pk="Driver_id" />
+			</fk>
+			<fk name="fk_special_order_transactions" to_schema="Transportation company" to_table="Transactions" >
+				<fk_column name="transaction_id" pk="Transaction_id" />
+			</fk>
+			<fk name="fk_special_order" to_schema="Transportation company" to_table="Payment_Method" >
+				<fk_column name="Payment_Method_ID" pk="pay_method_id" />
+			</fk>
+		</table>
+		<table name="Transactions" >
+			<column name="Transaction_id" type="int" jt="4" mandatory="y" />
+			<column name="type" type="varchar" length="20" jt="12" />
+			<column name="amount" type="float" jt="8" />
+			<column name="Description" type="varchar" length="1000" jt="12" />
+			<index name="Pk_Transactions_Transaction_id" unique="PRIMARY_KEY" >
+				<column name="Transaction_id" />
+			</index>
+			<fk name="fk_transactions_buses" to_schema="Transportation company" to_table="Buses" />
+		</table>
+		<table name="customer" >
+			<column name="customer_id" type="int" jt="4" mandatory="y" />
+			<column name="Cust_first_name" type="varchar" length="50" jt="12" />
+			<column name="cust_last_name" type="varchar" length="50" jt="12" />
+			<column name="phone_number" type="varchar" length="100" jt="12" />
+			<column name="address" type="varchar" length="100" jt="12" />
+			<column name="social_state" type="varchar" length="20" jt="12" />
+			<column name="Email" type="varchar" length="100" jt="12" />
+			<column name="Birthdate" type="date" jt="91" />
+			<index name="Pk_customer_customer_id" unique="PRIMARY_KEY" >
+				<column name="customer_id" />
+			</index>
+		</table>
+		<table name="employees" >
+			<column name="Emp_id" type="int" jt="4" mandatory="y" />
+			<column name="emp_first_name" type="varchar" length="50" jt="12" />
+			<column name="emp_last_name" type="varchar" length="50" jt="12" />
+			<column name="phone_number" type="varchar" length="100" jt="12" />
+			<column name="email" type="varchar" length="100" jt="12" />
+			<column name="position" type="varchar" length="50" jt="12" />
+			<column name="birthday" type="date" jt="91" />
+			<column name="ssn" type="int" jt="4" />
+			<column name="pay_id" type="int" jt="4" />
+			<column name="medical_id" type="int" jt="4" />
+			<index name="Pk_employees_Emp_id" unique="PRIMARY_KEY" >
+				<column name="Emp_id" />
+			</index>
+			<index name="Idx_employees_pay_id" unique="NORMAL" >
+				<column name="pay_id" />
+			</index>
+			<index name="Idx_employees_medical_id" unique="NORMAL" >
+				<column name="medical_id" />
+			</index>
+			<fk name="fk_employees_payroll" to_schema="Transportation company" to_table="payRoll" >
+				<fk_column name="pay_id" pk="pay_id" />
+			</fk>
+			<fk name="fk_employees_medical_care" to_schema="Transportation company" to_table="Medical_care" >
+				<fk_column name="medical_id" pk="Medical_id" />
+			</fk>
+		</table>
+		<table name="feedback" >
+			<column name="feedback_id" type="int" jt="4" mandatory="y" />
+			<column name="feedback_content" type="varchar" length="100" jt="12" />
+			<column name="customer_id" type="int" jt="4" />
+			<index name="Pk_feedback_feedback_id" unique="PRIMARY_KEY" >
+				<column name="feedback_id" />
+			</index>
+			<index name="Idx_feedback_customer_id" unique="NORMAL" >
+				<column name="customer_id" />
+			</index>
+			<fk name="fk_feedback_customer" to_schema="Transportation company" to_table="customer" >
+				<fk_column name="customer_id" pk="customer_id" />
+			</fk>
+		</table>
+		<table name="lines" >
+			<column name="Line_ID" type="int" jt="4" mandatory="y" />
+			<column name="Estimated_time" type="time" jt="92" />
+			<column name="Distance" type="float" jt="8" />
+			<column name="schedule_id" type="int" jt="4" />
+			<column name="price_plane_id" type="int" jt="4" />
+			<index name="Idx_lines_schedule_id" unique="NORMAL" >
+				<column name="schedule_id" />
+			</index>
+			<index name="Idx_lines_price_plane_id" unique="NORMAL" >
+				<column name="price_plane_id" />
+			</index>
+			<index name="Pk_lines_Line_ID" unique="PRIMARY_KEY" >
+				<column name="Line_ID" />
+			</index>
+			<fk name="fk_lines_schedule" to_schema="Transportation company" to_table="schedule" >
+				<fk_column name="schedule_id" pk="schedule_id" />
+			</fk>
+			<fk name="fk_lines_price_plane" to_schema="Transportation company" to_table="Price_plane" >
+				<fk_column name="price_plane_id" pk="Price_id" />
+			</fk>
+		</table>
+		<table name="lines_Branches" >
+			<column name="line_id" type="int" jt="4" mandatory="y" />
+			<column name="Branch_id" type="int" jt="4" mandatory="y" />
+			<index name="_1" unique="PRIMARY_KEY" >
+				<column name="line_id" />
+				<column name="Branch_id" />
+			</index>
+			<index name="Idx_lines_Branches_Branches_id" unique="UNIQUE" >
+				<column name="Branch_id" />
+			</index>
+			<index name="Idx_lines_Branches_line_id" unique="NORMAL" >
+				<column name="line_id" />
+			</index>
+			<fk name="fk_lines_branches_lines" to_schema="Transportation company" to_table="lines" >
+				<fk_column name="line_id" pk="Line_ID" />
+			</fk>
+			<fk name="fk_lines_branches_branches" to_schema="Transportation company" to_table="Branches" >
+				<fk_column name="Branch_id" pk="Branch_ID" />
+			</fk>
+		</table>
+		<table name="payRoll" >
+			<column name="pay_id" type="int" jt="4" mandatory="y" />
+			<column name="pay_amount" type="float" jt="8" />
+			<column name="Transaction_id" type="int" jt="4" />
+			<index name="Pk_payRoll_pay_id" unique="PRIMARY_KEY" >
+				<column name="pay_id" />
+			</index>
+			<index name="Idx_payRoll_Transaction_id" unique="NORMAL" >
+				<column name="Transaction_id" />
+			</index>
+			<fk name="fk_payroll_transactions" to_schema="Transportation company" to_table="Transactions" >
+				<fk_column name="Transaction_id" pk="Transaction_id" />
+			</fk>
+		</table>
+		<table name="penalties" >
+			<column name="penalty_id" type="int" jt="4" mandatory="y" />
+			<column name="penalty_amount" type="float" jt="8" />
+			<column name="pay_id" type="int" jt="4" />
+			<column name="penalty_description" type="varchar" length="1000" jt="12" />
+			<index name="Pk_penalties_penalty_id" unique="PRIMARY_KEY" >
+				<column name="penalty_id" />
+			</index>
+			<index name="Idx_penalties_pay_id" unique="NORMAL" >
+				<column name="pay_id" />
+			</index>
+			<fk name="fk_penalties_payroll" to_schema="Transportation company" to_table="payRoll" >
+				<fk_column name="pay_id" pk="pay_id" />
+			</fk>
+		</table>
+		<table name="schedule" >
+			<column name="schedule_id" type="int" jt="4" mandatory="y" />
+			<column name="Date_time_start" type="datetime" jt="93" />
+			<column name="Date_time_end" type="datetime" jt="93" />
+			<column name="bus_id" type="int" jt="4" />
+			<index name="Pk_schedule_schedule_id" unique="PRIMARY_KEY" >
+				<column name="schedule_id" />
+			</index>
+			<index name="Idx_schedule_bus_id" unique="NORMAL" >
+				<column name="bus_id" />
+			</index>
+			<fk name="bus_id" to_schema="Transportation company" to_table="Buses" >
+				<fk_column name="bus_id" pk="Bus_id" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="DbTest" database="MySql" driver_class="com.mysql.jdbc.Driver" driver_jar="mysql-connector-java-5.1.46.jar" driver_desc="Standard" host="localhost" port="3306" instance="DBTEST" user="root" />
+	<connector name="MariaDb" database="MariaDb" driver_class="org.mariadb.jdbc.Driver" driver_jar="mariadb-java-client-2.3.0.jar" driver_desc="Standard" host="localhost" port="3306" instance="dbtest" user="root" />
+	<layout name="Default Layout" id="Layout_26d1972" show_relation="columns" >
+		<entity schema="Transportation company" name="Employee_Bonus_JN" color="3986C1" x="1120" y="96" />
+		<entity schema="Transportation company" name="Employee_Penalty_JN" color="3986C1" x="1120" y="208" />
+		<entity schema="Transportation company" name="feedback" color="C1D8EE" x="640" y="864" />
+		<entity schema="Transportation company" name="customer" color="C1D8EE" x="304" y="672" />
+		<entity schema="Transportation company" name="Ranks" color="C1D8EE" x="304" y="880" />
+		<entity schema="Transportation company" name="Discount_ranks" color="C1D8EE" x="320" y="1008" />
+		<entity schema="Transportation company" name="Discount" color="C1D8EE" x="224" y="560" />
+		<entity schema="Transportation company" name="Buses" color="C1D8EE" x="464" y="512" />
+		<entity schema="Transportation company" name="Price_plane" color="C1D8EE" x="336" y="432" />
+		<entity schema="Transportation company" name="Buses_gas_money" color="3986C1" x="656" y="1056" />
+		<entity schema="Transportation company" name="employees" color="C1D8EE" x="944" y="96" />
+		<entity schema="Transportation company" name="payRoll" color="C1D8EE" x="1040" y="336" />
+		<entity schema="Transportation company" name="schedule" color="C1D8EE" x="640" y="192" />
+		<entity schema="Transportation company" name="Medical_care" color="C1D8EE" x="1072" y="768" />
+		<entity schema="Transportation company" name="Transactions" color="C1D8EE" x="1040" y="448" />
+		<entity schema="Transportation company" name="Insurance_standard" color="C1D8EE" x="1056" y="896" />
+		<entity schema="Transportation company" name="Payment_Method" color="C1D8EE" x="624" y="80" />
+		<entity schema="Transportation company" name="lines" color="C1D8EE" x="624" y="464" />
+		<entity schema="Transportation company" name="lines_Branches" color="C1D8EE" x="672" y="736" />
+		<entity schema="Transportation company" name="Reservation" color="C1D8EE" x="416" y="144" />
+		<entity schema="Transportation company" name="Actual_Trip" color="C1D8EE" x="432" y="48" />
+		<entity schema="Transportation company" name="Actual_Special_Trip" color="C1D8EE" x="1104" y="1056" />
+		<entity schema="Transportation company" name="Drivers" color="C1D8EE" x="256" y="128" />
+		<entity schema="Transportation company" name="Branches" color="C1D8EE" x="640" y="624" />
+		<entity schema="Transportation company" name="Special_order" color="C1D8EE" x="816" y="848" />
+		<entity schema="Transportation company" name="Drivers_Rating" color="C1D8EE" x="48" y="176" />
+		<entity schema="Transportation company" name="Driver_Penalty_JN" color="3986C1" x="48" y="304" />
+		<entity schema="Transportation company" name="penalties" color="C1D8EE" x="1024" y="592" />
+		<entity schema="Transportation company" name="Driver_Bonus_JN" color="3986C1" x="96" y="48" />
+		<entity schema="Transportation company" name="Bonuses" color="C1D8EE" x="832" y="624" />
+		<script name="Sql_Editor" id="Editor_12da095" language="SQL" >
+			<string><![CDATA[DROP SCHEMA dbtest;
+
+CREATE SCHEMA [Transportation company];
+
+CREATE TABLE [Transportation company].Branches ( 
+	Branch_ID            int NOT NULL   ,
+	address              varchar(100)    ,
+	CONSTRAINT Pk_Branches_Branch_ID PRIMARY KEY  ( Branch_ID )
+ ) ;
+
+CREATE TABLE [Transportation company].Buses ( 
+	Bus_id               int NOT NULL   ,
+	Bus_brand            varchar(50)    ,
+	Bus_Model            varchar(15) NOT NULL   ,
+	Bus_capacity         int    ,
+	Bus_license          int    ,
+	license_exp_date     date    ,
+	CONSTRAINT Pk_Buses_Bus_id PRIMARY KEY  ( Bus_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Discount ( 
+	Discount_id          int NOT NULL   ,
+	Discount_value       varchar(20)    ,
+	Expire_date          date    ,
+	CONSTRAINT Pk_Discount_Discount_id PRIMARY KEY  ( Discount_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Insurance_standard ( 
+	Insurance_standard_id int NOT NULL   ,
+	Position             varchar(50)    ,
+	Insurance_amount     float    ,
+	CONSTRAINT Pk_Inturance_standard_Insurance_standard_id PRIMARY KEY  ( Insurance_standard_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Payment_Method ( 
+	pay_method_id        int NOT NULL   ,
+	method_name          varchar(20)    ,
+	payment_info         varchar(1000)    ,
+	CONSTRAINT Pk_Payment_Method_pay_method_id PRIMARY KEY  ( pay_method_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Price_plane ( 
+	Price_id             int NOT NULL   ,
+	price                float    ,
+	class                varchar(50)    ,
+	bus_ID               int NOT NULL   ,
+	CONSTRAINT Pk_Price_plane_Price_id PRIMARY KEY  ( Price_id )
+ ) ;
+
+CREATE  INDEX Idx_Price_plane_bus_model ON [Transportation company].Price_plane ( bus_ID ) ;
+
+CREATE TABLE [Transportation company].Transactions ( 
+	Transaction_id       int NOT NULL   ,
+	type                 varchar(20)    ,
+	amount               float    ,
+	Description          varchar(1000)    ,
+	CONSTRAINT Pk_Transactions_Transaction_id PRIMARY KEY  ( Transaction_id )
+ ) ;
+
+CREATE TABLE [Transportation company].customer ( 
+	customer_id          int NOT NULL   ,
+	Cust_first_name      varchar(50)    ,
+	cust_last_name       varchar(50)    ,
+	phone_number         varchar(100)    ,
+	address              varchar(100)    ,
+	social_state         varchar(20)    ,
+	Email                varchar(100)    ,
+	Birthdate            date    ,
+	CONSTRAINT Pk_customer_customer_id PRIMARY KEY  ( customer_id )
+ ) ;
+
+CREATE TABLE [Transportation company].feedback ( 
+	feedback_id          int NOT NULL   ,
+	feedback_content     varchar(100)    ,
+	customer_id          int    ,
+	CONSTRAINT Pk_feedback_feedback_id PRIMARY KEY  ( feedback_id )
+ ) ;
+
+CREATE  INDEX Idx_feedback_customer_id ON [Transportation company].feedback ( customer_id ) ;
+
+CREATE TABLE [Transportation company].payRoll ( 
+	pay_id               int NOT NULL   ,
+	pay_amount           float    ,
+	Transaction_id       int    ,
+	CONSTRAINT Pk_payRoll_pay_id PRIMARY KEY  ( pay_id )
+ ) ;
+
+CREATE  INDEX Idx_payRoll_Transaction_id ON [Transportation company].payRoll ( Transaction_id ) ;
+
+CREATE TABLE [Transportation company].penalties ( 
+	penalty_id           int NOT NULL   ,
+	penalty_amount       float    ,
+	penalty_date         date    ,
+	pay_id               int    ,
+	penalty_description  varchar(1000)    ,
+	CONSTRAINT Pk_penalties_penalty_id PRIMARY KEY  ( penalty_id )
+ ) ;
+
+CREATE  INDEX Idx_penalties_pay_id ON [Transportation company].penalties ( pay_id ) ;
+
+CREATE TABLE [Transportation company].schedule ( 
+	schedule_id          int NOT NULL   ,
+	Date_time_start      datetime    ,
+	Date_time_end        datetime    ,
+	bus_id               int    ,
+	CONSTRAINT Pk_schedule_schedule_id PRIMARY KEY  ( schedule_id )
+ ) ;
+
+CREATE  INDEX Idx_schedule_bus_id ON [Transportation company].schedule ( bus_id ) ;
+
+CREATE TABLE [Transportation company].Buses_gas_money ( 
+	Bus_id               int NOT NULL   ,
+	Transaction_ID       int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_0 PRIMARY KEY  ( Bus_id )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID ON [Transportation company].Buses_gas_money ( Transaction_ID ) ;
+
+CREATE TABLE [Transportation company].Ranks ( 
+	Rank_id              int NOT NULL   ,
+	rank_name            varchar(50)    ,
+	level_limit          int    ,
+	customer_id          int    ,
+	CONSTRAINT Pk_Ranks_Rank_id PRIMARY KEY  ( Rank_id )
+ ) ;
+
+CREATE  INDEX Idx_Ranks_customer_id ON [Transportation company].Ranks ( customer_id ) ;
+
+CREATE TABLE [Transportation company].lines ( 
+	Line_ID              int NOT NULL   ,
+	Estimated_time       time    ,
+	Distance             float    ,
+	schedule_id          int    ,
+	price_plane_id       int    ,
+	CONSTRAINT Pk_lines_Line_ID PRIMARY KEY  ( Line_ID )
+ ) ;
+
+CREATE  INDEX Idx_lines_schedule_id ON [Transportation company].lines ( schedule_id ) ;
+
+CREATE  INDEX Idx_lines_price_plane_id ON [Transportation company].lines ( price_plane_id ) ;
+
+CREATE TABLE [Transportation company].lines_Branches ( 
+	line_id              int NOT NULL   ,
+	Branch_id            int NOT NULL   ,
+	CONSTRAINT _1 PRIMARY KEY  ( line_id, Branch_id ),
+	CONSTRAINT Idx_lines_Branches_Branches_id UNIQUE ( Branch_id ) 
+ ) ;
+
+CREATE  INDEX Idx_lines_Branches_line_id ON [Transportation company].lines_Branches ( line_id ) ;
+
+CREATE TABLE [Transportation company].Discount_ranks ( 
+	Rank_id              int NOT NULL   ,
+	Discount_id          int NOT NULL   ,
+	CONSTRAINT _2 PRIMARY KEY  ( Rank_id, Discount_id )
+ ) ;
+
+CREATE  INDEX Idx_Discount_ranks_Discount_id ON [Transportation company].Discount_ranks ( Discount_id ) ;
+
+CREATE  INDEX Idx_Discount_ranks_Rank_id ON [Transportation company].Discount_ranks ( Rank_id ) ;
+
+CREATE TABLE [Transportation company].Bonuses ( 
+	bonus_id             int NOT NULL   ,
+	bonus_amount         float    ,
+	bonus_date           date    ,
+	pay_id               int    ,
+	bouns_description    varchar(max)    ,
+	CONSTRAINT Pk_Bounnses_bouns_id PRIMARY KEY  ( bonus_id )
+ ) ;
+
+CREATE  INDEX Idx_Bounnses_pay_id ON [Transportation company].Bonuses ( pay_id ) ;
+
+CREATE TABLE [Transportation company].Driver_Bonus_JN ( 
+	Driver_ID            int NOT NULL   ,
+	Bonus_ID             int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_1 PRIMARY KEY  ( Driver_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_0 ON [Transportation company].Driver_Bonus_JN ( Bonus_ID ) ;
+
+CREATE TABLE [Transportation company].Driver_Penalty_JN ( 
+	Driver_ID            int NOT NULL   ,
+	Penalty_ID           int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_2 PRIMARY KEY  ( Driver_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_1 ON [Transportation company].Driver_Penalty_JN ( Penalty_ID ) ;
+
+CREATE TABLE [Transportation company].Drivers ( 
+	Driver_id            int NOT NULL   ,
+	First_name           varchar(50)    ,
+	last_name            varchar(50)    ,
+	phone_number         varchar(100)    ,
+	year_of_experince    int    ,
+	rating               float    ,
+	Birthday             date    ,
+	social_state         varchar(30)    ,
+	Ssn                  int    ,
+	license_number       int    ,
+	pay_id               int    ,
+	Medical_id           int    ,
+	CONSTRAINT Pk_Drivers_Driver_id PRIMARY KEY  ( Driver_id )
+ ) ;
+
+CREATE  INDEX Idx_Drivers_pay_id ON [Transportation company].Drivers ( pay_id ) ;
+
+CREATE  INDEX Idx_Drivers_Medical_id ON [Transportation company].Drivers ( Medical_id ) ;
+
+CREATE TABLE [Transportation company].Employee_Bonus_JN ( 
+	Employee_ID          int NOT NULL   ,
+	Bonus_ID             int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_3 PRIMARY KEY  ( Employee_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_2 ON [Transportation company].Employee_Bonus_JN ( Bonus_ID ) ;
+
+CREATE TABLE [Transportation company].Employee_Penalty_JN ( 
+	Employee_ID          int NOT NULL   ,
+	Penalty_ID           int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_4 PRIMARY KEY  ( Employee_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_3 ON [Transportation company].Employee_Penalty_JN ( Penalty_ID ) ;
+
+CREATE TABLE [Transportation company].Medical_care ( 
+	Medical_id           int NOT NULL   ,
+	balance              float    ,
+	Transaction_id       int    ,
+	Insurance_standard_id int    ,
+	CONSTRAINT Pk_Medical_care_Medical_id PRIMARY KEY  ( Medical_id )
+ ) ;
+
+CREATE  INDEX Idx_Medical_care_Transaction_id ON [Transportation company].Medical_care ( Transaction_id ) ;
+
+CREATE  INDEX Idx_Medical_care_Insurance_standard_id ON [Transportation company].Medical_care ( Insurance_standard_id ) ;
+
+CREATE TABLE [Transportation company].Reservation ( 
+	Reservation_id       int NOT NULL   ,
+	seat_no_booked       int    ,
+	Driver_id            int    ,
+	schedule_id          int    ,
+	payment_method_id    int    ,
+	feedback_id          int    ,
+	customer_id          int    ,
+	Transaction_id       int    ,
+	CONSTRAINT Pk_Reservation_Reservation_id PRIMARY KEY  ( Reservation_id )
+ ) ;
+
+CREATE  INDEX Idx_Reservation_Driver_id ON [Transportation company].Reservation ( Driver_id ) ;
+
+CREATE  INDEX Idx_Reservation_schedule_id ON [Transportation company].Reservation ( schedule_id ) ;
+
+CREATE  INDEX Idx_Reservation_payment_method_id ON [Transportation company].Reservation ( payment_method_id ) ;
+
+CREATE  INDEX Idx_Reservation_feedback_id ON [Transportation company].Reservation ( feedback_id ) ;
+
+CREATE  INDEX Idx_Reservation_Transaction_id ON [Transportation company].Reservation ( Transaction_id ) ;
+
+CREATE  INDEX Idx_Reservation_customer_id ON [Transportation company].Reservation ( customer_id ) ;
+
+CREATE TABLE [Transportation company].Special_order ( 
+	sp_order_id          int NOT NULL   ,
+	starting_point       varchar(50)    ,
+	Ending_point         varchar(50)    ,
+	Estimated_time       time    ,
+	price                float    ,
+	customer_id          int    ,
+	Bus_id               int    ,
+	Driver_id            int    ,
+	CONSTRAINT Pk_Special_order_sp_order_id PRIMARY KEY  ( sp_order_id )
+ ) ;
+
+CREATE  INDEX Idx_Special_order_Bus_id ON [Transportation company].Special_order ( Bus_id ) ;
+
+CREATE  INDEX Idx_Special_order_customer_id ON [Transportation company].Special_order ( customer_id ) ;
+
+CREATE  INDEX Idx_Special_order_Driver_id ON [Transportation company].Special_order ( Driver_id ) ;
+
+CREATE TABLE [Transportation company].employees ( 
+	Emp_id               int NOT NULL   ,
+	emp_first_name       varchar(50)    ,
+	emp_last_name        varchar(50)    ,
+	phone_number         varchar(100)    ,
+	email                varchar(100)    ,
+	position             varchar(50)    ,
+	birthday             date    ,
+	ssn                  int    ,
+	pay_id               int    ,
+	medical_id           int    ,
+	CONSTRAINT Pk_employees_Emp_id PRIMARY KEY  ( Emp_id )
+ ) ;
+
+CREATE  INDEX Idx_employees_pay_id ON [Transportation company].employees ( pay_id ) ;
+
+CREATE  INDEX Idx_employees_medical_id ON [Transportation company].employees ( medical_id ) ;
+
+ALTER TABLE [Transportation company].Bonuses ADD CONSTRAINT fk_bounnses_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Bonuses ADD CONSTRAINT fk_bounnses_drivers FOREIGN KEY (  ) REFERENCES [Transportation company].Drivers(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Buses_gas_money ADD CONSTRAINT fk_buses_gas_money FOREIGN KEY ( Transaction_ID ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Buses_gas_money ADD CONSTRAINT fk_buses_gas_money_buses FOREIGN KEY ( Bus_id ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Discount_ranks ADD CONSTRAINT fk_discount_ranks_discount FOREIGN KEY ( Discount_id ) REFERENCES [Transportation company].Discount( Discount_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Discount_ranks ADD CONSTRAINT fk_discount_ranks_ranks FOREIGN KEY ( Rank_id ) REFERENCES [Transportation company].Ranks( Rank_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Bonus_JN ADD CONSTRAINT fk_driver_penalty_jn_bonuses FOREIGN KEY ( Bonus_ID ) REFERENCES [Transportation company].Bonuses( bonus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Bonus_JN ADD CONSTRAINT fk_driver_penalty_jn_drivers FOREIGN KEY ( Driver_ID ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Penalty_JN ADD CONSTRAINT fk_driver_penalty_jn_0_drivers FOREIGN KEY ( Driver_ID ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Penalty_JN ADD CONSTRAINT fk_driver_penalty_jn_penalties FOREIGN KEY ( Penalty_ID ) REFERENCES [Transportation company].penalties( penalty_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_medical_care FOREIGN KEY ( Medical_id ) REFERENCES [Transportation company].Medical_care( Medical_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_bonuses FOREIGN KEY (  ) REFERENCES [Transportation company].Bonuses(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_penalties FOREIGN KEY (  ) REFERENCES [Transportation company].penalties(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Bonus_JN ADD CONSTRAINT fk_employee_bonus_jn_employees FOREIGN KEY ( Employee_ID ) REFERENCES [Transportation company].employees( Emp_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Bonus_JN ADD CONSTRAINT fk_employee_bonus_jn_bonuses FOREIGN KEY ( Bonus_ID ) REFERENCES [Transportation company].Bonuses( bonus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Penalty_JN ADD CONSTRAINT fk_employee_penalty_jn FOREIGN KEY ( Employee_ID ) REFERENCES [Transportation company].employees( Emp_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Penalty_JN ADD CONSTRAINT Penalty_ID FOREIGN KEY ( Penalty_ID ) REFERENCES [Transportation company].penalties( penalty_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Medical_care ADD CONSTRAINT fk_medical_care_transactions FOREIGN KEY ( Transaction_id ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Medical_care ADD CONSTRAINT fk_medical_care FOREIGN KEY ( Insurance_standard_id ) REFERENCES [Transportation company].Insurance_standard( Insurance_standard_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Medical_care ADD CONSTRAINT fk_medical_care_drivers FOREIGN KEY (  ) REFERENCES [Transportation company].Drivers(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Price_plane ADD CONSTRAINT fk_price_plane_buses FOREIGN KEY ( bus_ID ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Ranks ADD CONSTRAINT fk_ranks_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_drivers FOREIGN KEY ( Driver_id ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_schedule FOREIGN KEY ( schedule_id ) REFERENCES [Transportation company].schedule( schedule_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_payment_method FOREIGN KEY ( payment_method_id ) REFERENCES [Transportation company].Payment_Method( pay_method_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_feedback FOREIGN KEY ( feedback_id ) REFERENCES [Transportation company].feedback( feedback_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_transactions FOREIGN KEY ( Transaction_id ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Special_order ADD CONSTRAINT fk_special_order_buses FOREIGN KEY ( Bus_id ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Special_order ADD CONSTRAINT fk_special_order_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Special_order ADD CONSTRAINT fk_special_order_drivers FOREIGN KEY ( Driver_id ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Transactions ADD CONSTRAINT fk_transactions_buses FOREIGN KEY (  ) REFERENCES [Transportation company].Buses(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].employees ADD CONSTRAINT fk_employees_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].employees ADD CONSTRAINT fk_employees_medical_care FOREIGN KEY ( medical_id ) REFERENCES [Transportation company].Medical_care( Medical_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].feedback ADD CONSTRAINT fk_feedback_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines ADD CONSTRAINT fk_lines_schedule FOREIGN KEY ( schedule_id ) REFERENCES [Transportation company].schedule( schedule_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines ADD CONSTRAINT fk_lines_price_plane FOREIGN KEY ( price_plane_id ) REFERENCES [Transportation company].Price_plane( Price_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines_Branches ADD CONSTRAINT fk_lines_branches_lines FOREIGN KEY ( line_id ) REFERENCES [Transportation company].lines( Line_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines_Branches ADD CONSTRAINT fk_lines_branches_branches FOREIGN KEY ( Branch_id ) REFERENCES [Transportation company].Branches( Branch_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].payRoll ADD CONSTRAINT fk_payroll_transactions FOREIGN KEY ( Transaction_id ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].penalties ADD CONSTRAINT fk_penalties_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].schedule ADD CONSTRAINT bus_id FOREIGN KEY ( bus_id ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+]]></string>
+		</script>
+		<script name="Sql_Editor_001" id="Editor_4840b4a" language="SQL" >
+			<string><![CDATA[DROP SCHEMA dbtest;
+
+CREATE SCHEMA [Transportation company];
+
+CREATE TABLE [Transportation company].Branches ( 
+	Branch_ID            int NOT NULL   ,
+	address              varchar(100)    ,
+	CONSTRAINT Pk_Branches_Branch_ID PRIMARY KEY  ( Branch_ID )
+ ) ;
+
+CREATE TABLE [Transportation company].Buses ( 
+	Bus_id               int NOT NULL   ,
+	Bus_brand            varchar(50)    ,
+	Bus_Model            varchar(15) NOT NULL   ,
+	Bus_capacity         int    ,
+	Bus_license          int    ,
+	license_exp_date     date    ,
+	CONSTRAINT Pk_Buses_Bus_id PRIMARY KEY  ( Bus_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Discount ( 
+	Discount_id          int NOT NULL   ,
+	Discount_value       varchar(20)    ,
+	Expire_date          date    ,
+	CONSTRAINT Pk_Discount_Discount_id PRIMARY KEY  ( Discount_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Insurance_standard ( 
+	Insurance_standard_id int NOT NULL   ,
+	Position             varchar(50)    ,
+	Insurance_amount     float    ,
+	CONSTRAINT Pk_Inturance_standard_Insurance_standard_id PRIMARY KEY  ( Insurance_standard_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Payment_Method ( 
+	pay_method_id        int NOT NULL   ,
+	method_name          varchar(20)    ,
+	payment_info         varchar(1000)    ,
+	CONSTRAINT Pk_Payment_Method_pay_method_id PRIMARY KEY  ( pay_method_id )
+ ) ;
+
+CREATE TABLE [Transportation company].Price_plane ( 
+	Price_id             int NOT NULL   ,
+	price                float    ,
+	class                varchar(50)    ,
+	bus_ID               int NOT NULL   ,
+	CONSTRAINT Pk_Price_plane_Price_id PRIMARY KEY  ( Price_id )
+ ) ;
+
+CREATE  INDEX Idx_Price_plane_bus_model ON [Transportation company].Price_plane ( bus_ID ) ;
+
+CREATE TABLE [Transportation company].Transactions ( 
+	Transaction_id       int NOT NULL   ,
+	type                 varchar(20)    ,
+	amount               float    ,
+	Description          varchar(1000)    ,
+	CONSTRAINT Pk_Transactions_Transaction_id PRIMARY KEY  ( Transaction_id )
+ ) ;
+
+CREATE TABLE [Transportation company].customer ( 
+	customer_id          int NOT NULL   ,
+	Cust_first_name      varchar(50)    ,
+	cust_last_name       varchar(50)    ,
+	phone_number         varchar(100)    ,
+	address              varchar(100)    ,
+	social_state         varchar(20)    ,
+	Email                varchar(100)    ,
+	Birthdate            date    ,
+	CONSTRAINT Pk_customer_customer_id PRIMARY KEY  ( customer_id )
+ ) ;
+
+CREATE TABLE [Transportation company].feedback ( 
+	feedback_id          int NOT NULL   ,
+	feedback_content     varchar(100)    ,
+	customer_id          int    ,
+	CONSTRAINT Pk_feedback_feedback_id PRIMARY KEY  ( feedback_id )
+ ) ;
+
+CREATE  INDEX Idx_feedback_customer_id ON [Transportation company].feedback ( customer_id ) ;
+
+CREATE TABLE [Transportation company].payRoll ( 
+	pay_id               int NOT NULL   ,
+	pay_amount           float    ,
+	Transaction_id       int    ,
+	CONSTRAINT Pk_payRoll_pay_id PRIMARY KEY  ( pay_id )
+ ) ;
+
+CREATE  INDEX Idx_payRoll_Transaction_id ON [Transportation company].payRoll ( Transaction_id ) ;
+
+CREATE TABLE [Transportation company].penalties ( 
+	penalty_id           int NOT NULL   ,
+	penalty_amount       float    ,
+	penalty_date         date    ,
+	pay_id               int    ,
+	penalty_description  varchar(1000)    ,
+	CONSTRAINT Pk_penalties_penalty_id PRIMARY KEY  ( penalty_id )
+ ) ;
+
+CREATE  INDEX Idx_penalties_pay_id ON [Transportation company].penalties ( pay_id ) ;
+
+CREATE TABLE [Transportation company].schedule ( 
+	schedule_id          int NOT NULL   ,
+	Date_time_start      datetime    ,
+	Date_time_end        datetime    ,
+	bus_id               int    ,
+	CONSTRAINT Pk_schedule_schedule_id PRIMARY KEY  ( schedule_id )
+ ) ;
+
+CREATE  INDEX Idx_schedule_bus_id ON [Transportation company].schedule ( bus_id ) ;
+
+CREATE TABLE [Transportation company].Buses_gas_money ( 
+	Bus_id               int NOT NULL   ,
+	Transaction_ID       int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_0 PRIMARY KEY  ( Bus_id )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID ON [Transportation company].Buses_gas_money ( Transaction_ID ) ;
+
+CREATE TABLE [Transportation company].Ranks ( 
+	Rank_id              int NOT NULL   ,
+	rank_name            varchar(50)    ,
+	level_limit          int    ,
+	customer_id          int    ,
+	CONSTRAINT Pk_Ranks_Rank_id PRIMARY KEY  ( Rank_id )
+ ) ;
+
+CREATE  INDEX Idx_Ranks_customer_id ON [Transportation company].Ranks ( customer_id ) ;
+
+CREATE TABLE [Transportation company].lines ( 
+	Line_ID              int NOT NULL   ,
+	Estimated_time       time    ,
+	Distance             float    ,
+	schedule_id          int    ,
+	price_plane_id       int    ,
+	CONSTRAINT Pk_lines_Line_ID PRIMARY KEY  ( Line_ID )
+ ) ;
+
+CREATE  INDEX Idx_lines_schedule_id ON [Transportation company].lines ( schedule_id ) ;
+
+CREATE  INDEX Idx_lines_price_plane_id ON [Transportation company].lines ( price_plane_id ) ;
+
+CREATE TABLE [Transportation company].lines_Branches ( 
+	line_id              int NOT NULL   ,
+	Branch_id            int NOT NULL   ,
+	CONSTRAINT _1 PRIMARY KEY  ( line_id, Branch_id ),
+	CONSTRAINT Idx_lines_Branches_Branches_id UNIQUE ( Branch_id ) 
+ ) ;
+
+CREATE  INDEX Idx_lines_Branches_line_id ON [Transportation company].lines_Branches ( line_id ) ;
+
+CREATE TABLE [Transportation company].Discount_ranks ( 
+	Rank_id              int NOT NULL   ,
+	Discount_id          int NOT NULL   ,
+	CONSTRAINT _2 PRIMARY KEY  ( Rank_id, Discount_id )
+ ) ;
+
+CREATE  INDEX Idx_Discount_ranks_Discount_id ON [Transportation company].Discount_ranks ( Discount_id ) ;
+
+CREATE  INDEX Idx_Discount_ranks_Rank_id ON [Transportation company].Discount_ranks ( Rank_id ) ;
+
+CREATE TABLE [Transportation company].Bonuses ( 
+	bonus_id             int NOT NULL   ,
+	bonus_amount         float    ,
+	bonus_date           date    ,
+	pay_id               int    ,
+	bouns_description    varchar(max)    ,
+	CONSTRAINT Pk_Bounnses_bouns_id PRIMARY KEY  ( bonus_id )
+ ) ;
+
+CREATE  INDEX Idx_Bounnses_pay_id ON [Transportation company].Bonuses ( pay_id ) ;
+
+CREATE TABLE [Transportation company].Driver_Bonus_JN ( 
+	Driver_ID            int NOT NULL   ,
+	Bonus_ID             int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_1 PRIMARY KEY  ( Driver_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_0 ON [Transportation company].Driver_Bonus_JN ( Bonus_ID ) ;
+
+CREATE TABLE [Transportation company].Driver_Penalty_JN ( 
+	Driver_ID            int NOT NULL   ,
+	Penalty_ID           int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_2 PRIMARY KEY  ( Driver_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_1 ON [Transportation company].Driver_Penalty_JN ( Penalty_ID ) ;
+
+CREATE TABLE [Transportation company].Drivers ( 
+	Driver_id            int NOT NULL   ,
+	First_name           varchar(50)    ,
+	last_name            varchar(50)    ,
+	phone_number         varchar(100)    ,
+	year_of_experince    int    ,
+	rating               float    ,
+	Birthday             date    ,
+	social_state         varchar(30)    ,
+	Ssn                  int    ,
+	license_number       int    ,
+	pay_id               int    ,
+	Medical_id           int    ,
+	CONSTRAINT Pk_Drivers_Driver_id PRIMARY KEY  ( Driver_id )
+ ) ;
+
+CREATE  INDEX Idx_Drivers_pay_id ON [Transportation company].Drivers ( pay_id ) ;
+
+CREATE  INDEX Idx_Drivers_Medical_id ON [Transportation company].Drivers ( Medical_id ) ;
+
+CREATE TABLE [Transportation company].Employee_Bonus_JN ( 
+	Employee_ID          int NOT NULL   ,
+	Bonus_ID             int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_3 PRIMARY KEY  ( Employee_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_2 ON [Transportation company].Employee_Bonus_JN ( Bonus_ID ) ;
+
+CREATE TABLE [Transportation company].Employee_Penalty_JN ( 
+	Employee_ID          int NOT NULL   ,
+	Penalty_ID           int NOT NULL   ,
+	CONSTRAINT Pk_Buses_Bus_id_4 PRIMARY KEY  ( Employee_ID )
+ ) ;
+
+CREATE  INDEX Idx_Buses_gas_money_Transaction_ID_3 ON [Transportation company].Employee_Penalty_JN ( Penalty_ID ) ;
+
+CREATE TABLE [Transportation company].Medical_care ( 
+	Medical_id           int NOT NULL   ,
+	balance              float    ,
+	Transaction_id       int    ,
+	Insurance_standard_id int    ,
+	CONSTRAINT Pk_Medical_care_Medical_id PRIMARY KEY  ( Medical_id )
+ ) ;
+
+CREATE  INDEX Idx_Medical_care_Transaction_id ON [Transportation company].Medical_care ( Transaction_id ) ;
+
+CREATE  INDEX Idx_Medical_care_Insurance_standard_id ON [Transportation company].Medical_care ( Insurance_standard_id ) ;
+
+CREATE TABLE [Transportation company].Reservation ( 
+	Reservation_id       int NOT NULL   ,
+	seat_no_booked       int    ,
+	Driver_id            int    ,
+	schedule_id          int    ,
+	payment_method_id    int    ,
+	feedback_id          int    ,
+	customer_id          int    ,
+	Transaction_id       int    ,
+	CONSTRAINT Pk_Reservation_Reservation_id PRIMARY KEY  ( Reservation_id )
+ ) ;
+
+CREATE  INDEX Idx_Reservation_Driver_id ON [Transportation company].Reservation ( Driver_id ) ;
+
+CREATE  INDEX Idx_Reservation_schedule_id ON [Transportation company].Reservation ( schedule_id ) ;
+
+CREATE  INDEX Idx_Reservation_payment_method_id ON [Transportation company].Reservation ( payment_method_id ) ;
+
+CREATE  INDEX Idx_Reservation_feedback_id ON [Transportation company].Reservation ( feedback_id ) ;
+
+CREATE  INDEX Idx_Reservation_Transaction_id ON [Transportation company].Reservation ( Transaction_id ) ;
+
+CREATE  INDEX Idx_Reservation_customer_id ON [Transportation company].Reservation ( customer_id ) ;
+
+CREATE TABLE [Transportation company].Special_order ( 
+	sp_order_id          int NOT NULL   ,
+	starting_point       varchar(50)    ,
+	Ending_point         varchar(50)    ,
+	Estimated_time       time    ,
+	price                float    ,
+	customer_id          int    ,
+	Bus_id               int    ,
+	Driver_id            int    ,
+	CONSTRAINT Pk_Special_order_sp_order_id PRIMARY KEY  ( sp_order_id )
+ ) ;
+
+CREATE  INDEX Idx_Special_order_Bus_id ON [Transportation company].Special_order ( Bus_id ) ;
+
+CREATE  INDEX Idx_Special_order_customer_id ON [Transportation company].Special_order ( customer_id ) ;
+
+CREATE  INDEX Idx_Special_order_Driver_id ON [Transportation company].Special_order ( Driver_id ) ;
+
+CREATE TABLE [Transportation company].employees ( 
+	Emp_id               int NOT NULL   ,
+	emp_first_name       varchar(50)    ,
+	emp_last_name        varchar(50)    ,
+	phone_number         varchar(100)    ,
+	email                varchar(100)    ,
+	position             varchar(50)    ,
+	birthday             date    ,
+	ssn                  int    ,
+	pay_id               int    ,
+	medical_id           int    ,
+	CONSTRAINT Pk_employees_Emp_id PRIMARY KEY  ( Emp_id )
+ ) ;
+
+CREATE  INDEX Idx_employees_pay_id ON [Transportation company].employees ( pay_id ) ;
+
+CREATE  INDEX Idx_employees_medical_id ON [Transportation company].employees ( medical_id ) ;
+
+ALTER TABLE [Transportation company].Bonuses ADD CONSTRAINT fk_bounnses_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Bonuses ADD CONSTRAINT fk_bounnses_drivers FOREIGN KEY (  ) REFERENCES [Transportation company].Drivers(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Buses_gas_money ADD CONSTRAINT fk_buses_gas_money FOREIGN KEY ( Transaction_ID ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Buses_gas_money ADD CONSTRAINT fk_buses_gas_money_buses FOREIGN KEY ( Bus_id ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Discount_ranks ADD CONSTRAINT fk_discount_ranks_discount FOREIGN KEY ( Discount_id ) REFERENCES [Transportation company].Discount( Discount_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Discount_ranks ADD CONSTRAINT fk_discount_ranks_ranks FOREIGN KEY ( Rank_id ) REFERENCES [Transportation company].Ranks( Rank_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Bonus_JN ADD CONSTRAINT fk_driver_penalty_jn_bonuses FOREIGN KEY ( Bonus_ID ) REFERENCES [Transportation company].Bonuses( bonus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Bonus_JN ADD CONSTRAINT fk_driver_penalty_jn_drivers FOREIGN KEY ( Driver_ID ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Penalty_JN ADD CONSTRAINT fk_driver_penalty_jn_0_drivers FOREIGN KEY ( Driver_ID ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Driver_Penalty_JN ADD CONSTRAINT fk_driver_penalty_jn_penalties FOREIGN KEY ( Penalty_ID ) REFERENCES [Transportation company].penalties( penalty_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_medical_care FOREIGN KEY ( Medical_id ) REFERENCES [Transportation company].Medical_care( Medical_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_bonuses FOREIGN KEY (  ) REFERENCES [Transportation company].Bonuses(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Drivers ADD CONSTRAINT fk_drivers_penalties FOREIGN KEY (  ) REFERENCES [Transportation company].penalties(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Bonus_JN ADD CONSTRAINT fk_employee_bonus_jn_employees FOREIGN KEY ( Employee_ID ) REFERENCES [Transportation company].employees( Emp_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Bonus_JN ADD CONSTRAINT fk_employee_bonus_jn_bonuses FOREIGN KEY ( Bonus_ID ) REFERENCES [Transportation company].Bonuses( bonus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Penalty_JN ADD CONSTRAINT fk_employee_penalty_jn FOREIGN KEY ( Employee_ID ) REFERENCES [Transportation company].employees( Emp_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Employee_Penalty_JN ADD CONSTRAINT Penalty_ID FOREIGN KEY ( Penalty_ID ) REFERENCES [Transportation company].penalties( penalty_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Medical_care ADD CONSTRAINT fk_medical_care_transactions FOREIGN KEY ( Transaction_id ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Medical_care ADD CONSTRAINT fk_medical_care FOREIGN KEY ( Insurance_standard_id ) REFERENCES [Transportation company].Insurance_standard( Insurance_standard_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Medical_care ADD CONSTRAINT fk_medical_care_drivers FOREIGN KEY (  ) REFERENCES [Transportation company].Drivers(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Price_plane ADD CONSTRAINT fk_price_plane_buses FOREIGN KEY ( bus_ID ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Ranks ADD CONSTRAINT fk_ranks_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_drivers FOREIGN KEY ( Driver_id ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_schedule FOREIGN KEY ( schedule_id ) REFERENCES [Transportation company].schedule( schedule_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_payment_method FOREIGN KEY ( payment_method_id ) REFERENCES [Transportation company].Payment_Method( pay_method_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_feedback FOREIGN KEY ( feedback_id ) REFERENCES [Transportation company].feedback( feedback_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_transactions FOREIGN KEY ( Transaction_id ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Reservation ADD CONSTRAINT fk_reservation_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Special_order ADD CONSTRAINT fk_special_order_buses FOREIGN KEY ( Bus_id ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Special_order ADD CONSTRAINT fk_special_order_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Special_order ADD CONSTRAINT fk_special_order_drivers FOREIGN KEY ( Driver_id ) REFERENCES [Transportation company].Drivers( Driver_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].Transactions ADD CONSTRAINT fk_transactions_buses FOREIGN KEY (  ) REFERENCES [Transportation company].Buses(  ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].employees ADD CONSTRAINT fk_employees_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].employees ADD CONSTRAINT fk_employees_medical_care FOREIGN KEY ( medical_id ) REFERENCES [Transportation company].Medical_care( Medical_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].feedback ADD CONSTRAINT fk_feedback_customer FOREIGN KEY ( customer_id ) REFERENCES [Transportation company].customer( customer_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines ADD CONSTRAINT fk_lines_schedule FOREIGN KEY ( schedule_id ) REFERENCES [Transportation company].schedule( schedule_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines ADD CONSTRAINT fk_lines_price_plane FOREIGN KEY ( price_plane_id ) REFERENCES [Transportation company].Price_plane( Price_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines_Branches ADD CONSTRAINT fk_lines_branches_lines FOREIGN KEY ( line_id ) REFERENCES [Transportation company].lines( Line_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].lines_Branches ADD CONSTRAINT fk_lines_branches_branches FOREIGN KEY ( Branch_id ) REFERENCES [Transportation company].Branches( Branch_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].payRoll ADD CONSTRAINT fk_payroll_transactions FOREIGN KEY ( Transaction_id ) REFERENCES [Transportation company].Transactions( Transaction_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].penalties ADD CONSTRAINT fk_penalties_payroll FOREIGN KEY ( pay_id ) REFERENCES [Transportation company].payRoll( pay_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Transportation company].schedule ADD CONSTRAINT bus_id FOREIGN KEY ( bus_id ) REFERENCES [Transportation company].Buses( Bus_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+]]></string>
+		</script>
+	</layout>
+</project>
